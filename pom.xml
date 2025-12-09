@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- The model version for the Maven POM -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Project Information -->
+    <groupId>org.demotours</groupId>
+    <artifactId>JMeter-Maven-Test</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <!-- Global Properties -->
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jmeter.maven.plugin.version>3.8.0</jmeter.maven.plugin.version>
+        <properties.plugin.version>1.2.1</properties.plugin.version>
+
+        <!-- Default test properties.
+        These will be overridden by src/test/properties/TestParameters.properties when properties-maven-plugin runs during the build. -->
+        <test.folder>DemoToursTest</test.folder>
+        <test.script>DemoToursTest.jmx</test.script>
+        <test.protocol>https</test.protocol>
+        <test.baseUrl>demo.guru99.com</test.baseUrl>
+        <test.users>10</test.users>
+        <test.rampUp>10</test.rampUp>
+        <test.loops>10</test.loops>
+        <test.rampUpTime>60</test.rampUpTime>
+        <test.rampUpStepCount>60</test.rampUpStepCount>
+        <test.testDuration>300</test.testDuration>
+        <test.rampDownTime>60</test.rampDownTime>
+        <test.startRPS>100</test.startRPS>
+        <test.steadyStateRPS>100</test.steadyStateRPS>
+        <test.endRPS>100</test.endRPS>
+        <test.gamesPerPlayer>100</test.gamesPerPlayer>
+    </properties>
+
+    <!-- Build Configuration -->
+    <build>
+        <plugins>
+            <plugin>
+                <!-- Properties Maven Plugin to read test parameters from properties file -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>${properties.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>src/test/properties/TestParameters.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+
+                <!-- Apache-JMeter Maven Plugin -->
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <version>${jmeter.maven.plugin.version}</version>
+
+                <!-- Execution Goals -->
+                <executions>
+                    <!-- Configure JMeter Tests-->
+                    <execution>
+                        <id>configuration</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- Run JMeter Tests -->
+                    <execution>
+                        <id>jmeter-tests</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jmeter</goal>
+                            <goal>results</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <!-- Plugin Configuration -->
+                <configuration>
+
+                    <!-- Apache-JMeter Version -->
+                    <jmeterVersion>5.6.3</jmeterVersion>
+
+                    <!-- Apache-JMeter Extensions -->
+                    <jmeterExtensions>
+                        <artifact>kg.apc:jmeter-plugins-manager:1.11</artifact>
+                        <artifact>kg.apc:jmeter-plugins-tst:2.6</artifact>
+                        <artifact>kg.apc:jmeter-plugins-casutg:3.1.1</artifact>
+                        <artifact>kg.apc:jmeter-plugins-cmn-jmeter:0.8</artifact>
+                    </jmeterExtensions>
+
+                    <!-- Apache-JMeter Generate Reports -->
+                    <generateReports>true</generateReports>
+
+                    <!-- Apache-JMeter Result Directories -->
+                    <resultsDirectory>${project.build.directory}/jmeter/results</resultsDirectory> <!-- Location for test results -->
+                    <reportDirectory>${project.build.directory}/jmeter/reports/</reportDirectory> <!-- Location for generated reports -->
+
+                    <!-- Apache-JMeter Test Scripts -->
+                    <testFilesDirectory>${project.basedir}/src/test/${test.folder}</testFilesDirectory>
+                    <testFilesIncluded>
+                        <jMeterTestFile>${test.script}</jMeterTestFile>
+                    </testFilesIncluded>
+
+                    <suppressJMeterOutput>false</suppressJMeterOutput>
+
+                    <!-- JMeter Test Properties -->
+                    <propertiesJMeter>
+                        <Protocol>${test.protocol}</Protocol>
+                        <BaseURL>${test.baseUrl}</BaseURL>
+                        <NoOfUsers>${test.users}</NoOfUsers>
+                        <RampUp>${test.rampUp}</RampUp>
+                        <LoopCount>${test.loops}</LoopCount>
+                        <RampUpTime>${test.rampUpTime}</RampUpTime>
+                        <RampUpStepCount>${test.rampUpStepCount}</RampUpStepCount>
+                        <endRPS>${test.endRPS}</endRPS>
+                        <TestDuration>${test.testDuration}</TestDuration>
+                        <RampDownTime>${test.rampDownTime}</RampDownTime>
+                        <startRPS>${test.startRPS}</startRPS>
+                        <steadystateRPS>${test.steadyStateRPS}</steadystateRPS>
+                        <NoOfGamesPerPlayer>${test.gamesPerPlayer}</NoOfGamesPerPlayer>
+                    </propertiesJMeter>
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

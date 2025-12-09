@@ -1,0 +1,115 @@
+cmd@Library('pipelines@master') _
+
+pipeline {
+    agent { node { label 'LocalHost' } }
+
+    environment {
+        // Maven command to execute the tests
+        MAVEN_CMD = 'mvn clean verify'
+        // JDK version defined in your Jenkins tools configuration
+        JDK_VERSION = 'jdk17.0.15'
+    }
+
+    parameters {
+        // Test File Configuration
+        string(name: 'DTestFolder', defaultValue: 'DemoToursTest', description: 'Folder containing the JMeter script files.')
+        string(name: 'DTestScript', defaultValue: 'DemoToursTest.jmx', description: 'The specific .jmx script to execute.')
+
+        // Host Configuration
+        string(name: 'DProtocol', defaultValue: 'http', description: 'Protocol to be used for the test (http/https).')
+        string(name: 'DBaseUrl', defaultValue: 'localhost', description: 'Base URL of the application under test.')
+
+        // Load Profile Configuration (Thread Group/Concurrency Group)
+        string(name: 'DRampUpTime', defaultValue: '60', description: 'Total Ramp-up time in seconds for all users.')
+        string(name: 'DTestDuration', defaultValue: '300', description: 'Duration of the steady-state test in seconds.')
+        string(name: 'DRampUpSteps', defaultValue: '60', description: 'Ramp-up Step Count (used for concurrency thread groups).')
+        string(name: 'DRampDownTime', defaultValue: '60', description: 'Ramp-down time in seconds.')
+
+        // Throughput Shaping / Advanced Configuration
+        string(name: 'DStartRPS', defaultValue: '100', description: 'Starting Requests Per Second (RPS) for throughput control.')
+        string(name: 'DSteadyStateRPS', defaultValue: '100', description: 'Target steady-state Requests Per Second (RPS).')
+        string(name: 'DEndRPS', defaultValue: '100', description: 'Ending Requests Per Second (RPS).')
+        string(name: 'DGamesPerPlayer', defaultValue: '100', description: 'No. of Games per Player (maps to test.gamesPerPlayer).')
+    }
+
+    tools {
+        maven 'Maven 3.9.11' // Ensure this matches your Jenkins tool configuration
+        jdk env.JDK_VERSION
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out the repository...'
+                checkout scm
+            }
+        }
+
+        stage('Setup') {
+            steps {
+                echo 'Setting up the environment for performance tests...'
+                // Running 'mvn clean' here is redundant as MAVEN_CMD includes it, but kept for clarity/quick setup.
+                sh 'mvn clean'
+            }
+        }
+
+        stage('Run Performance Tests') {
+            steps {
+                echo 'Executing JMeter Performance Tests for DemoToursTest...'
+                echo """
+                Test Script: ${params.DTestFolder}/${params.DTestScript}
+                Base URL: ${params.DProtocol}://${params.DBaseUrl}
+                Ramp-up Time: ${params.DRampUpTime}s
+                Test Duration: ${params.DTestDuration}s
+                Ramp-up Steps: ${params.DRampUpSteps}
+                Ramp-down Time: ${params.DRampDownTime}s
+                Start RPS: ${params.DStartRPS}
+                Steady-State RPS: ${params.DSteadyStateRPS}
+                End RPS: ${params.DEndRPS}
+                Games per Player: ${params.DGamesPerPlayer}
+                """
+                sh """
+                   $MAVEN_CMD \
+                       -Dtest.folder=${params.DTestFolder} \
+                       -Dtest.script=${params.DTestScript} \
+                       -Dtest.protocol=${params.DProtocol} \
+                       -Dtest.baseUrl="${params.DBaseUrl}" \
+                       -Dtest.rampUpTime=${params.DRampUpTime} \
+                       -Dtest.rampUpStepCount=${params.DRampUpSteps} \
+                       -Dtest.testDuration=${params.DTestDuration} \
+                       -Dtest.rampDownTime=${params.DRampDownTime} \
+                       -Dtest.startRPS=${params.DStartRPS} \
+                       -Dtest.steadyStateRPS=${params.DSteadyStateRPS} \
+                       -Dtest.endRPS=${params.DEndRPS} \
+                       -Dtest.gamesPerPlayer=${params.DGamesPerPlayer} \
+                   """
+            }
+        }
+
+
+        stage('Publish Reports') {
+            steps {
+                echo 'Publishing JMeter Performance Test Results...'
+                // Check if JMeter generated the result files
+                sh 'ls -l target/jmeter/results/*.csv'
+                // Archive CSV results
+                archiveArtifacts artifacts: 'target/jmeter/results/*.csv', allowEmptyArchive: true
+                // Archive generated HTML report directory (assuming a report folder name)
+                archiveArtifacts artifacts: 'target/jmeter/reports/**/*', allowEmptyArchive: true
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up workspace...'
+            cleanWs()
+        }
+        success {
+            echo 'Performance pipeline executed successfully!'
+        }
+        failure {
+            echo 'Performance pipeline execution failed! Please review the logs for more details.'
+        }
+    }
+}
