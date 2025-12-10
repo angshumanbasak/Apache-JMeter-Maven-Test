@@ -1,7 +1,5 @@
-@Library('pipelines@master') _
-
 pipeline {
-    agent { node { label 'LocalHost' } }
+    agent any
 
     environment {
         // Maven command to execute the tests
@@ -12,25 +10,25 @@ pipeline {
 
     parameters {
         // Test File Configuration
-        string(name: 'DTestFolder', defaultValue: 'WireMockNormalGamePlay', description: 'Folder containing the JMeter script files.')
-        string(name: 'DTestScript', defaultValue: 'WireMockNormalGamePlayTestPlan.jmx', description: 'The specific .jmx script to execute.')
+        string(name: 'TestFolder', defaultValue: 'WireMockNormalGamePlay', description: 'Folder containing the JMeter script files.')
+        string(name: 'TestScript', defaultValue: 'WireMockNormalGamePlayTestPlan.jmx', description: 'The specific .jmx script to execute.')
 
         // Host Configuration
-        string(name: 'DProtocol', defaultValue: 'http', description: 'Protocol to be used for the test (http/https).')
-        string(name: 'DBaseUrl', defaultValue: 'localhost', description: 'Base URL of the application under test.')
-        string(name: 'DPort', defaultValue: '8990', description: 'Port number of the application under test.')
+        string(name: 'Protocol', defaultValue: 'http', description: 'Protocol to be used for the test (http/https).')
+        string(name: 'BaseUrl', defaultValue: 'localhost', description: 'Base URL of the application under test.')
+        string(name: 'Port', defaultValue: '8990', description: 'Port number of the application under test.')
 
         // Load Profile Configuration (Thread Group/Concurrency Group)
-        string(name: 'DRampUpTime', defaultValue: '60', description: 'Total Ramp-up time in seconds for all users.')
-        string(name: 'DTestDuration', defaultValue: '300', description: 'Duration of the steady-state test in seconds.')
-        string(name: 'DRampUpSteps', defaultValue: '60', description: 'Ramp-up Step Count (used for concurrency thread groups).')
-        string(name: 'DRampDownTime', defaultValue: '60', description: 'Ramp-down time in seconds.')
+        string(name: 'RampUpTime', defaultValue: '60', description: 'Total Ramp-up time in seconds for all users.')
+        string(name: 'RampUpSteps', defaultValue: '60', description: 'Ramp-up Step Count (used for concurrency thread groups).')
+        string(name: 'TestDuration', defaultValue: '300', description: 'Duration of the steady-state test in seconds.')
+        string(name: 'RampDownTime', defaultValue: '60', description: 'Ramp-down time in seconds.')
 
         // Throughput Shaping / Advanced Configuration
-        string(name: 'DStartRPS', defaultValue: '100', description: 'Starting Requests Per Second (RPS) for throughput control.')
-        string(name: 'DSteadyStateRPS', defaultValue: '100', description: 'Target steady-state Requests Per Second (RPS).')
-        string(name: 'DEndRPS', defaultValue: '100', description: 'Ending Requests Per Second (RPS).')
-        string(name: 'DNumberOfGamesPerPlayer', defaultValue: '100', description: 'No. of Games per Player (maps to test.gamesPerPlayer).')
+        string(name: 'StartRPS', defaultValue: '100', description: 'Starting Requests Per Second (RPS) for throughput control.')
+        string(name: 'SteadyStateRPS', defaultValue: '100', description: 'Target steady-state Requests Per Second (RPS).')
+        string(name: 'EndRPS', defaultValue: '100', description: 'Ending Requests Per Second (RPS).')
+        string(name: 'NumberOfGamesPerPlayer', defaultValue: '100', description: 'No. of Games per Player (maps to test.gamesPerPlayer).')
     }
 
     tools {
@@ -58,35 +56,35 @@ pipeline {
             steps {
                 echo 'Executing JMeter Performance Tests for DemoToursTest...'
                 echo """
-                Test Folder: ${params.DTestFolder}
-                Test Script: ${params.DTestFolder}
-                Protocol: ${params.DProtocol}
-                Base URL: ${params.DBaseUrl}
-                Port: ${params.DPort}
-                Ramp-up Time: ${params.DRampUpTime}s
-                Test Duration: ${params.DTestDuration}s
-                Ramp-up Steps: ${params.DRampUpSteps}
-                Ramp-down Time: ${params.DRampDownTime}s
-                Start RPS: ${params.DStartRPS}
-                Steady-State RPS: ${params.DSteadyStateRPS}
-                End RPS: ${params.DEndRPS}
-                Number of Games per Player: ${params.DNumberOfGamesPerPlayer}
+                Test Folder: ${params.TestFolder}
+                Test Script: ${params.TestScript}
+                Protocol: ${params.Protocol}
+                Base URL: ${params.BaseUrl}
+                Port: ${params.Port}
+                Ramp-up Time: ${params.RampUpTime}s
+                Ramp-up Steps: ${params.RampUpSteps}
+                Test Duration: ${params.TestDuration}s
+                Ramp-down Time: ${params.RampDownTime}s
+                Start RPS: ${params.StartRPS}
+                Steady-State RPS: ${params.SteadyStateRPS}
+                End RPS: ${params.EndRPS}
+                Number of Games per Player: ${params.NumberOfGamesPerPlayer}
                 """
                 sh """
                    $MAVEN_CMD \
-                       -Dtest.folder=${params.DTestFolder} \
-                       -Dtest.script=${params.DTestScript} \
-                       -Dtest.protocol=${params.DProtocol} \
-                       -Dtest.baseUrl=${params.DBaseUrl} \
-                       -Dtest.port=${params.DPort} \
-                       -Dtest.rampUpTime=${params.DRampUpTime} \
-                       -Dtest.rampUpStepCount=${params.DRampUpSteps} \
-                       -Dtest.testDuration=${params.DTestDuration} \
-                       -Dtest.rampDownTime=${params.DRampDownTime} \
-                       -Dtest.startRPS=${params.DStartRPS} \
-                       -Dtest.steadyStateRPS=${params.DSteadyStateRPS} \
-                       -Dtest.endRPS=${params.DEndRPS} \
-                       -Dtest.NoOfGamesPerPlayer=${params.DNumberOfGamesPerPlayer} \
+                       -Dtest.folder=${params.TestFolder} \
+                       -Dtest.script=${params.TestScript} \
+                       -Dtest.protocol=${params.Protocol} \
+                       -Dtest.baseUrl=${params.BaseUrl} \
+                       -Dtest.port=${params.Port} \
+                       -Dtest.rampUpTime=${params.RampUpTime} \
+                       -Dtest.rampUpStepCount=${params.RampUpSteps} \
+                       -Dtest.testDuration=${params.TestDuration} \
+                       -Dtest.rampDownTime=${params.RampDownTime} \
+                       -Dtest.startRPS=${params.StartRPS} \
+                       -Dtest.steadyStateRPS=${params.SteadyStateRPS} \
+                       -Dtest.endRPS=${params.EndRPS} \
+                       -Dtest.NoOfGamesPerPlayer=${params.NumberOfGamesPerPlayer} \
                    """
             }
         }
@@ -95,12 +93,17 @@ pipeline {
         stage('Publish Reports') {
             steps {
                 echo 'Publishing JMeter Performance Test Results...'
-                // Check if JMeter generated the result files
+                // Check if the CSV results exist
                 sh 'ls -l target/jmeter/results/*.csv'
-                // Archive CSV results
+                // Check if the HTML report directory exists
+                sh 'ls -l target/jmeter/reports/'
+                // Archive the generated CSV results
                 archiveArtifacts artifacts: 'target/jmeter/results/*.csv', allowEmptyArchive: true
-                // Archive generated HTML report directory (assuming a report folder name)
+                // Archive generated HTML report directory
                 archiveArtifacts artifacts: 'target/jmeter/reports/**/*', allowEmptyArchive: true
+                // Archive JMeter logs
+                archiveArtifacts artifacts: 'target/jmeter/logs/*.log', allowEmptyArchive: true
+
             }
         }
     }
