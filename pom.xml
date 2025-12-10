@@ -20,10 +20,11 @@
 
         <!-- Default test properties.
         These will be overridden by src/test/properties/TestParameters.properties when properties-maven-plugin runs during the build. -->
-        <test.folder>DemoToursTest</test.folder>
-        <test.script>DemoToursTest.jmx</test.script>
-        <test.protocol>https</test.protocol>
-        <test.baseUrl>demo.guru99.com</test.baseUrl>
+        <test.folder>WireMockNormalGamePlay</test.folder>
+        <test.script>WireMockNormalGamePlayTestPlan.jmx</test.script>
+        <test.protocol>http</test.protocol>
+        <test.baseUrl>localhost</test.baseUrl>
+        <test.port>8990</test.port>
         <test.users>10</test.users>
         <test.rampUp>10</test.rampUp>
         <test.loops>10</test.loops>
@@ -34,34 +35,13 @@
         <test.startRPS>100</test.startRPS>
         <test.steadyStateRPS>100</test.steadyStateRPS>
         <test.endRPS>100</test.endRPS>
-        <test.gamesPerPlayer>100</test.gamesPerPlayer>
+        <test.NoOfGamesPerPlayer>100</test.NoOfGamesPerPlayer>
     </properties>
 
     <!-- Build Configuration -->
     <build>
         <plugins>
             <plugin>
-                <!-- Properties Maven Plugin to read test parameters from properties file -->
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>${properties.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>src/test/properties/TestParameters.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-
                 <!-- Apache-JMeter Maven Plugin -->
                 <groupId>com.lazerycode.jmeter</groupId>
                 <artifactId>jmeter-maven-plugin</artifactId>
@@ -122,17 +102,18 @@
                     <propertiesJMeter>
                         <Protocol>${test.protocol}</Protocol>
                         <BaseURL>${test.baseUrl}</BaseURL>
+                        <Port>${test.port}</Port>
                         <NoOfUsers>${test.users}</NoOfUsers>
                         <RampUp>${test.rampUp}</RampUp>
                         <LoopCount>${test.loops}</LoopCount>
                         <RampUpTime>${test.rampUpTime}</RampUpTime>
                         <RampUpStepCount>${test.rampUpStepCount}</RampUpStepCount>
-                        <endRPS>${test.endRPS}</endRPS>
                         <TestDuration>${test.testDuration}</TestDuration>
                         <RampDownTime>${test.rampDownTime}</RampDownTime>
                         <startRPS>${test.startRPS}</startRPS>
-                        <steadystateRPS>${test.steadyStateRPS}</steadystateRPS>
-                        <NoOfGamesPerPlayer>${test.gamesPerPlayer}</NoOfGamesPerPlayer>
+                        <steadyStateRPS>${test.steadyStateRPS}</steadyStateRPS>
+                        <endRPS>${test.endRPS}</endRPS>
+                        <NoOfGamesPerPlayer>${test.NoOfGamesPerPlayer}</NoOfGamesPerPlayer>
                     </propertiesJMeter>
 
                 </configuration>
