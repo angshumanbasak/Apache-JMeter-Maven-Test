@@ -96,6 +96,7 @@
                         <jMeterTestFile>${test.script}</jMeterTestFile>
                     </testFilesIncluded>
 
+                    <!-- Suppress JMeter output in the console -->
                     <suppressJMeterOutput>false</suppressJMeterOutput>
 
                     <!-- JMeter Test Properties -->
