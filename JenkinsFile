@@ -1,4 +1,4 @@
-cmd@Library('pipelines@master') _
+@Library('pipelines@master') _
 
 pipeline {
     agent { node { label 'LocalHost' } }
@@ -12,12 +12,13 @@ pipeline {
 
     parameters {
         // Test File Configuration
-        string(name: 'DTestFolder', defaultValue: 'DemoToursTest', description: 'Folder containing the JMeter script files.')
-        string(name: 'DTestScript', defaultValue: 'DemoToursTest.jmx', description: 'The specific .jmx script to execute.')
+        string(name: 'DTestFolder', defaultValue: 'WireMockNormalGamePlay', description: 'Folder containing the JMeter script files.')
+        string(name: 'DTestScript', defaultValue: 'WireMockNormalGamePlayTestPlan.jmx', description: 'The specific .jmx script to execute.')
 
         // Host Configuration
         string(name: 'DProtocol', defaultValue: 'http', description: 'Protocol to be used for the test (http/https).')
         string(name: 'DBaseUrl', defaultValue: 'localhost', description: 'Base URL of the application under test.')
+        string(name: 'DPort', defaultValue: '8990', description: 'Port number of the application under test.')
 
         // Load Profile Configuration (Thread Group/Concurrency Group)
         string(name: 'DRampUpTime', defaultValue: '60', description: 'Total Ramp-up time in seconds for all users.')
@@ -29,7 +30,7 @@ pipeline {
         string(name: 'DStartRPS', defaultValue: '100', description: 'Starting Requests Per Second (RPS) for throughput control.')
         string(name: 'DSteadyStateRPS', defaultValue: '100', description: 'Target steady-state Requests Per Second (RPS).')
         string(name: 'DEndRPS', defaultValue: '100', description: 'Ending Requests Per Second (RPS).')
-        string(name: 'DGamesPerPlayer', defaultValue: '100', description: 'No. of Games per Player (maps to test.gamesPerPlayer).')
+        string(name: 'DNumberOfGamesPerPlayer', defaultValue: '100', description: 'No. of Games per Player (maps to test.gamesPerPlayer).')
     }
 
     tools {
@@ -57,8 +58,11 @@ pipeline {
             steps {
                 echo 'Executing JMeter Performance Tests for DemoToursTest...'
                 echo """
-                Test Script: ${params.DTestFolder}/${params.DTestScript}
-                Base URL: ${params.DProtocol}://${params.DBaseUrl}
+                Test Folder: ${params.DTestFolder}
+                Test Script: ${params.DTestFolder}
+                Protocol: ${params.DProtocol}
+                Base URL: ${params.DBaseUrl}
+                Port: ${params.DPort}
                 Ramp-up Time: ${params.DRampUpTime}s
                 Test Duration: ${params.DTestDuration}s
                 Ramp-up Steps: ${params.DRampUpSteps}
@@ -66,14 +70,15 @@ pipeline {
                 Start RPS: ${params.DStartRPS}
                 Steady-State RPS: ${params.DSteadyStateRPS}
                 End RPS: ${params.DEndRPS}
-                Games per Player: ${params.DGamesPerPlayer}
+                Number of Games per Player: ${params.DNumberOfGamesPerPlayer}
                 """
                 sh """
                    $MAVEN_CMD \
                        -Dtest.folder=${params.DTestFolder} \
                        -Dtest.script=${params.DTestScript} \
                        -Dtest.protocol=${params.DProtocol} \
-                       -Dtest.baseUrl="${params.DBaseUrl}" \
+                       -Dtest.baseUrl=${params.DBaseUrl} \
+                       -Dtest.port=${params.DPort} \
                        -Dtest.rampUpTime=${params.DRampUpTime} \
                        -Dtest.rampUpStepCount=${params.DRampUpSteps} \
                        -Dtest.testDuration=${params.DTestDuration} \
@@ -81,7 +86,7 @@ pipeline {
                        -Dtest.startRPS=${params.DStartRPS} \
                        -Dtest.steadyStateRPS=${params.DSteadyStateRPS} \
                        -Dtest.endRPS=${params.DEndRPS} \
-                       -Dtest.gamesPerPlayer=${params.DGamesPerPlayer} \
+                       -Dtest.NoOfGamesPerPlayer=${params.DNumberOfGamesPerPlayer} \
                    """
             }
         }
