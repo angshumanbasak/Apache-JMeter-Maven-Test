@@ -1,5 +1,5 @@
 pipeline {
-    agent { node { label 'LocalHost' } }
+    agent any
 
     environment {
         // Maven command to execute the tests
