@@ -120,46 +120,46 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="false">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables-Properties" enabled="false">
         <collectionProp name="Arguments.arguments">
           <elementProp name="NoOfGamesPerPlayer" elementType="Argument">
             <stringProp name="Argument.name">NoOfGamesPerPlayer</stringProp>
-            <stringProp name="Argument.value">${__P(NoOfGamesPerPlayer)}</stringProp>
+            <stringProp name="Argument.value">${__P(NoOfGamesPerPlayer,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="RampUpTime" elementType="Argument">
             <stringProp name="Argument.name">RampUpTime</stringProp>
-            <stringProp name="Argument.value">${__P(RampUpTime)}</stringProp>
+            <stringProp name="Argument.value">${__P(RampUpTime,60)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="RampUpStepCount" elementType="Argument">
             <stringProp name="Argument.name">RampUpStepCount</stringProp>
-            <stringProp name="Argument.value">${__P(RampUpStepCount)}</stringProp>
+            <stringProp name="Argument.value">${__P(RampUpStepCount),60}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="RampDownTime" elementType="Argument">
             <stringProp name="Argument.name">RampDownTime</stringProp>
-            <stringProp name="Argument.value">${__P(RampDownTime)}</stringProp>
+            <stringProp name="Argument.value">${__P(RampDownTime,60)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="TestDuration" elementType="Argument">
             <stringProp name="Argument.name">TestDuration</stringProp>
-            <stringProp name="Argument.value">${__P(TestDuration)}</stringProp>
+            <stringProp name="Argument.value">${__P(TestDuration,300)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="startRPS" elementType="Argument">
             <stringProp name="Argument.name">startRPS</stringProp>
-            <stringProp name="Argument.value">${__P(startRPS)}</stringProp>
+            <stringProp name="Argument.value">${__P(startRPS,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="steadyStateRPS" elementType="Argument">
             <stringProp name="Argument.name">steadyStateRPS</stringProp>
-            <stringProp name="Argument.value">${__P(steadyStateRPS)}</stringProp>
+            <stringProp name="Argument.value">${__P(steadyStateRPS,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="endRPS" elementType="Argument">
             <stringProp name="Argument.name">endRPS</stringProp>
-            <stringProp name="Argument.value">${__P(endRPS)}</stringProp>
+            <stringProp name="Argument.value">${__P(endRPS,100)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="Protocol" elementType="Argument">
@@ -169,12 +169,12 @@
           </elementProp>
           <elementProp name="Base_Url" elementType="Argument">
             <stringProp name="Argument.name">Base_Url</stringProp>
-            <stringProp name="Argument.value">${__P(BaseURL)}</stringProp>
+            <stringProp name="Argument.value">${__P(BaseURL,localhost)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="Port" elementType="Argument">
             <stringProp name="Argument.name">Port</stringProp>
-            <stringProp name="Argument.value">${__P(Port)}</stringProp>
+            <stringProp name="Argument.value">${__P(Port,8990)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="Path" elementType="Argument">
@@ -230,7 +230,7 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
-      <com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup guiclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroupGui" testclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup" testname="Concurrency Thread Group">
+      <com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup guiclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroupGui" testclass="com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup" testname="Concurrency Thread Group" enabled="true">
         <elementProp name="ThreadGroup.main_controller" elementType="com.blazemeter.jmeter.control.VirtualUserController"/>
         <stringProp name="ThreadGroup.on_sample_error">stopthread</stringProp>
         <stringProp name="TargetLevel">${__tstFeedback(tst-WagerLoadRPS,1,1000,5)}</stringProp>
@@ -243,12 +243,12 @@
         <boolProp name="same_user_on_next_iteration">false</boolProp>
       </com.blazemeter.jmeter.threads.concurrency.ConcurrencyThreadGroup>
       <hashTree>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="GetAccountTransaction">
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="GetAccountTransaction" enabled="true">
           <boolProp name="TransactionController.parent">true</boolProp>
           <boolProp name="TransactionController.includeTimers">false</boolProp>
         </TransactionController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetAccount">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetAccount" enabled="true">
             <stringProp name="TestPlan.comments">This endpoint retrieves detailed information about a player&apos;s account, including their balance and other associated details.</stringProp>
             <stringProp name="HTTPSampler.domain">${Base_Url}</stringProp>
             <stringProp name="HTTPSampler.port">${Port}</stringProp>
@@ -402,7 +402,7 @@ log.info(&quot;Thread Number: ${__threadNum} - Generated SessionID: &quot; + pro
             <boolProp name="TransactionController.includeTimers">false</boolProp>
           </TransactionController>
           <hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetBalance">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetBalance" enabled="true">
               <stringProp name="TestPlan.comments">This endpoint retrieves detailed information about a player&apos;s balance, including their balance and other associated details.</stringProp>
               <stringProp name="HTTPSampler.domain">${Base_Url}</stringProp>
               <stringProp name="HTTPSampler.port">${Port}</stringProp>
@@ -514,12 +514,12 @@ log.info(&quot;Thread Number: ${__threadNum} - Generated SessionID: &quot; + pro
           <stringProp name="IfController.condition">${JMeterThread.last_sample_ok}</stringProp>
         </IfController>
         <hashTree>
-          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="SpinsPerPlayer">
+          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="SpinsPerPlayer" enabled="true">
             <boolProp name="LoopController.continue_forever">true</boolProp>
             <stringProp name="LoopController.loops">${__P(NoOfGamesPerPlayer)}</stringProp>
           </LoopController>
           <hashTree>
-            <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="GetWagerTransaction">
+            <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="GetWagerTransaction" enabled="true">
               <boolProp name="TransactionController.parent">true</boolProp>
               <boolProp name="TransactionController.includeTimers">false</boolProp>
             </TransactionController>
@@ -829,18 +829,18 @@ log.info(&quot;Thread Number: ${__threadNum} - Generated TransactionID: &quot; +
                 <hashTree/>
               </hashTree>
             </hashTree>
-            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="CheckGetWagerSuccessFailure">
+            <IfController guiclass="IfControllerPanel" testclass="IfController" testname="CheckGetWagerSuccessFailure" enabled="true">
               <boolProp name="IfController.evaluateAll">false</boolProp>
               <boolProp name="IfController.useExpression">true</boolProp>
               <stringProp name="IfController.condition">${JMeterThread.last_sample_ok}</stringProp>
             </IfController>
             <hashTree>
-              <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="GetResultTransaction">
+              <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="GetResultTransaction" enabled="true">
                 <boolProp name="TransactionController.parent">true</boolProp>
                 <boolProp name="TransactionController.includeTimers">false</boolProp>
               </TransactionController>
               <hashTree>
-                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetResultPending">
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetResultPending" enabled="true">
                   <stringProp name="TestPlan.comments">This endpoint retrieves detailed information about a player&apos;s ResultPending, including their balance and other associated details.</stringProp>
                   <stringProp name="HTTPSampler.domain">${Base_Url}</stringProp>
                   <stringProp name="HTTPSampler.port">${Port}</stringProp>
@@ -961,7 +961,7 @@ log.info(&quot;Thread Number: ${__threadNum} - Generated TransactionID: &quot; +
                   <stringProp name="HTTPSampler.implementation">HttpClient4</stringProp>
                 </HTTPSamplerProxy>
                 <hashTree>
-                  <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="RetrieveGameStatus">
+                  <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="RetrieveGameStatus" enabled="true">
                     <stringProp name="RegexExtractor.useHeaders">unescaped</stringProp>
                     <stringProp name="RegexExtractor.refname">gameStatusPending</stringProp>
                     <stringProp name="RegexExtractor.regex">&lt;GAMESTATUS&gt;(.*?)&lt;\/GAMESTATUS&gt;</stringProp>
@@ -986,7 +986,7 @@ log.info(&quot;Thread Number: ${__threadNum} - Generated TransactionID: &quot; +
                   </ResponseAssertion>
                   <hashTree/>
                 </hashTree>
-                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetResultCompleted">
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GetResultCompleted" enabled="true">
                   <stringProp name="TestPlan.comments">This endpoint retrieves detailed information about a player&apos;s ResultCompleted, including their balance and other associated details.</stringProp>
                   <stringProp name="HTTPSampler.domain">${Base_Url}</stringProp>
                   <stringProp name="HTTPSampler.port">${Port}</stringProp>
