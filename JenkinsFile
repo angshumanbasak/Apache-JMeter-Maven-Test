@@ -73,7 +73,7 @@ pipeline {
                 End RPS: ${params.EndRPS}
                 Number of Games per Player: ${params.NumberOfGamesPerPlayer}
                 """
-                sh """
+                bat """
                    $MAVEN_CMD \
                        -Dtest.folder=${params.TestFolder} \
                        -Dtest.script=${params.TestScript} \
