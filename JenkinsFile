@@ -48,7 +48,7 @@ pipeline {
             steps {
                 echo 'Setting up the environment for performance tests...'
                 // Running 'mvn clean' here is redundant as MAVEN_CMD includes it, but kept for clarity/quick setup.
-                sh 'mvn clean'
+                bat 'mvn clean'
             }
         }
 
