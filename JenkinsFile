@@ -96,17 +96,16 @@ pipeline {
         stage('Publish Reports') {
             steps {
                 echo 'Publishing JMeter Performance Test Results...'
-                // Check if the CSV results exist
-                sh 'ls -l target/jmeter/results/*.csv'
-                // Check if the HTML report directory exists
-                sh 'ls -l target/jmeter/reports/'
-                // Archive the generated CSV results
-                archiveArtifacts artifacts: 'target/jmeter/results/*.csv', allowEmptyArchive: true
-                // Archive generated HTML report directory
-                archiveArtifacts artifacts: 'target/jmeter/reports/**/*', allowEmptyArchive: true
-                // Archive JMeter logs
-                archiveArtifacts artifacts: 'target/jmeter/logs/*.log', allowEmptyArchive: true
-
+                        // Use backslashes (\) for paths in the bat command.
+                        bat 'dir target\\jmeter\\results\\*.csv'
+                        // Check if the HTML report directory exists (Windows equivalent: dir)
+                        bat 'dir target\\jmeter\\reports\\'
+                        // Archive the generated CSV results
+                        archiveArtifacts artifacts: 'target/jmeter/results/*.csv', allowEmptyArchive: true
+                        // Archive generated HTML report directory
+                        archiveArtifacts artifacts: 'target/jmeter/reports/**/*', allowEmptyArchive: true
+                        // Archive JMeter logs
+                        archiveArtifacts artifacts: 'target/jmeter/logs/*.log', allowEmptyArchive: true
             }
         }
     }
