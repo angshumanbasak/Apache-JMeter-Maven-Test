@@ -49,12 +49,15 @@ pipeline {
                 echo 'Setting up the environment for performance tests...'
                 // Running 'mvn clean' here is redundant as MAVEN_CMD includes it, but kept for clarity/quick setup.
                 bat 'mvn clean'
+                // OPTIONAL: Purge the local Maven cache for the JMeter plugin
+                echo 'Cleaning local Maven cache for JMeter dependencies...'
+                bat 'mvn dependency:purge-local-repository -DmanualIncludes=com.lazerycode.jmeter'
             }
         }
 
         stage('Run Performance Tests') {
             steps {
-                echo 'Executing JMeter Performance Tests for DemoToursTest...'
+                echo 'Executing JMeter Performance Tests for WireMockNormalGamePlay...'
                 echo """
                 Test Folder: ${params.TestFolder}
                 Test Script: ${params.TestScript}
