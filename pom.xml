@@ -32,9 +32,9 @@
         <test.rampUpStepCount>60</test.rampUpStepCount>
         <test.testDuration>300</test.testDuration>
         <test.rampDownTime>60</test.rampDownTime>
-        <test.startRPS>100</test.startRPS>
-        <test.steadyStateRPS>100</test.steadyStateRPS>
-        <test.endRPS>100</test.endRPS>
+        <test.startRPS>10</test.startRPS>
+        <test.steadyStateRPS>10</test.steadyStateRPS>
+        <test.endRPS>10</test.endRPS>
         <test.NoOfGamesPerPlayer>100</test.NoOfGamesPerPlayer>
     </properties>
 
